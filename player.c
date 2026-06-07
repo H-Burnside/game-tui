@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <ncurses.h>
 #include <stdio.h>
 #include "player.h"
 #include "map.h"
@@ -8,9 +9,8 @@ void placePlayer(Player* player){
 	player->col = rand()%((SQ_SIZE*2)-2)+1;
 }
 
-void movePlayer(Player* player, char map[][SQ_SIZE*2]){
-	putchar('\t');
-	char cursor = (char)getchar();
+int movePlayer(Player* player, char map[][SQ_SIZE*2]){
+	char cursor = getch();
 	switch(cursor){
 		case 'j':
 			// Going down
@@ -19,11 +19,11 @@ void movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			    	(map[player->row+1][player->col]==' ')  // there's space to go
 			){
 				// Changing location
-				map[player->row][player->col]=' ';
 				player->row += 1;
 			} else {
-				printf("\a");
+				beep();
 			}
+			return 1;
 			break;
 
 		case 'k':
@@ -33,11 +33,11 @@ void movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			    	(map[player->row-1][player->col]==' ')  // there's space to go
 			){
 				// Changing location
-				map[player->row][player->col]=' ';
 				player->row -=1;
 			} else {
-				printf("\a");
+				beep();
 			}
+			return 1;
 
 			break;
 
@@ -48,11 +48,11 @@ void movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			    	(map[player->row][player->col-1]==' ')  // there's space to go
 			){
 				// Changing location
-				map[player->row][player->col]=' ';
 				player->col -=1;
 			} else {
-				printf("\a");
+				beep();
 			}
+			return 1;
 			break;
 		case 'l':
 			// Going to the right  
@@ -61,13 +61,14 @@ void movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			    	(map[player->row][player->col+1]==' ') 		// there's space to go
 			){
 				// Changing location
-				map[player->row][player->col]=' ';
 				player->col +=1;
 			} else {
-				printf("\a");
+				beep();
 			}
-
+			return 1;
 			break;
+		case 'q':
+			return 0;
 	}
-	printf("\033[2J\033[1;1H");
+	return 0;
 }

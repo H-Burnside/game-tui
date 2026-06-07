@@ -1,19 +1,22 @@
 #include <stdio.h>
+#include <ncurses.h>
 #include <stdlib.h>
 
 #include "map.h"
 #include "player.h"
+#include "window.h"
 
-void drawMap(char map[][SQ_SIZE*2], Player* player){
+void drawMap(char map[][SQ_SIZE*2], Player* player,Corner* coo){
 	for (int i = 0 ; i < SQ_SIZE ; i++ ){
 		for(int j=0; j < SQ_SIZE*2 ; j++){
 			if (i == player->row && j == player->col){
-				map[i][j]='P';	
+				attron(COLOR_PAIR(1));
+				mvaddch(coo->row + i , coo->col +j, 'P');	
+				attroff(COLOR_PAIR(1));
+			}else {
+		        mvaddch(coo->row + i, coo->col + j, map[i][j]);
 			}
-		        putchar(map[i][j]);
 		}
-
-		putchar('\n');	
 	}
 
 }

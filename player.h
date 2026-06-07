@@ -9,6 +9,6 @@ typedef struct {
 } Player ;
 
 void placePlayer(Player*);
-void movePlayer(Player*, char[][SQ_SIZE*2]);
+int movePlayer(Player*, char[][SQ_SIZE*2]);
 
 #endif
