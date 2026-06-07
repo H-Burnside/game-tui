@@ -1,13 +1,11 @@
-// game.h 
+#ifndef MAP_H
+#define MAP_H
 
-#ifndef GAME_H
-#define GAME_H
-
-#define SQ_SIZE 25
-#define PROB 10
+#include "player.h"
+#include "constants.h"
 
 
-void drawMap(char map[][SQ_SIZE*2]);
+void drawMap(char map[][SQ_SIZE*2],Player*);
 char maper(int,int);
 
 void generateMap(char map[][SQ_SIZE*2]);
