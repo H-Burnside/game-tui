@@ -1,1 +1,2 @@
-# pacman-tui
+### Just a game for your terminal
+
