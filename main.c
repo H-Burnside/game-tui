@@ -31,12 +31,13 @@ int main(){
 	
 	
 	// Player placing and functions	
-	generateMap(map);
 	Player player;
 	placePlayer(&player);
+	generateMap(map);
 
 	int running = 1;	
 	while(running){
+		erase();
 		drawMap(map,&player,&coo);
 		refresh();
 		running = movePlayer(&player, map);

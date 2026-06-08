@@ -24,7 +24,6 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 				beep();
 			}
 			return 1;
-			break;
 
 		case 'k':
 			// Going up 
@@ -38,9 +37,6 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 				beep();
 			}
 			return 1;
-
-			break;
-
 		case 'h':
 			// Going to the left  
 			if (
@@ -53,7 +49,6 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 				beep();
 			}
 			return 1;
-			break;
 		case 'l':
 			// Going to the right  
 			if (

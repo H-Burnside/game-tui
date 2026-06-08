@@ -7,6 +7,7 @@ typedef struct {
 } Corner;
 
 
+
 void getCoord(Corner*);
 
 #endif
