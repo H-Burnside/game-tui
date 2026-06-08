@@ -1,16 +1,22 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <stdio.h>
+
+
 #include "player.h"
 #include "map.h"
 
-void placePlayer(Player* player){
+void placePlayer(Player* player, char map[][SQ_SIZE*2]){
+	do {
 	player->row = rand()%(SQ_SIZE-2)+1 ;
 	player->col = rand()%((SQ_SIZE*2)-2)+1;
+	} while (map[player->row][player->col]!=' ');
+
+	player->direction = TO_RIGHT;
 }
 
-int movePlayer(Player* player, char map[][SQ_SIZE*2]){
-	char cursor = getch();
+int movePlayer(Player* player, char map[][SQ_SIZE*2], Bullet* ammo){
+	int cursor = getch();
 	switch(cursor){
 		case 'j':
 			// Going down
@@ -20,6 +26,7 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			){
 				// Changing location
 				player->row += 1;
+				player->direction = TO_DOWN; 
 			} else {
 				beep();
 			}
@@ -33,6 +40,7 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			){
 				// Changing location
 				player->row -=1;
+				player->direction = TO_UP;
 			} else {
 				beep();
 			}
@@ -45,6 +53,7 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			){
 				// Changing location
 				player->col -=1;
+				player->direction = TO_LEFT;
 			} else {
 				beep();
 			}
@@ -57,13 +66,40 @@ int movePlayer(Player* player, char map[][SQ_SIZE*2]){
 			){
 				// Changing location
 				player->col +=1;
+				player->direction = TO_RIGHT;
 			} else {
 				beep();
 			}
 			return 1;
-			break;
+		case ' ':
+			shoot(ammo, player);
+			return 1;
 		case 'q':
 			return 0;
+		default:
+			return 1;		
 	}
-	return 0;
+}
+
+void shoot(Bullet* ammo, Player* player){
+
+	for (int i = 0; i < MAX_AMMO ; i++){
+		// Inactive bullets
+		if (!(ammo[i].direction >> 2)){
+			ammo[i].direction  = (ACTIVE | player->direction);
+			ammo[i].row = player->row;
+			ammo[i].col = player->col;
+
+			Direction direction = player->direction;
+			switch(direction){
+				case TO_UP : ammo[i].row -=1 ; break;
+				case TO_DOWN : ammo[i].row +=1 ; break;
+				case TO_LEFT : ammo[i].col -=1 ; break;
+				case TO_RIGHT : ammo[i].col += 1; break;
+			}
+			
+			break;
+		}
+	}
+
 }
