@@ -6,6 +6,7 @@
 #include "player.h"
 #include "window.h"
 #include "bullet.h"
+#include "enemy.h"
 
 int main(){
 	
@@ -15,7 +16,8 @@ int main(){
 	// ammo
 	Bullet AMMO[MAX_AMMO];
 	loadAMMO(AMMO);
-	
+	Enemy Enemies[MAX_ENEMIES];
+
 	// Initiating 
 	initscr();
 	raw();
@@ -27,7 +29,9 @@ int main(){
 
 	init_pair(1,COLOR_GREEN, COLOR_BLACK);
 	init_pair(3,COLOR_RED, COLOR_BLACK);
-	
+	int level = 0; 
+	int enemiesAlive = 0;
+
 	// Seed by the current time
 	srand(time(NULL));
 
@@ -41,12 +45,17 @@ int main(){
 	generateMap(map);
 	Player player;
 	placePlayer(&player,map);
+	prepareEnemies(Enemies);
 
 	int running = 1;	
 	while(running){
 		erase();
 		drawMap(map,&player,&coo);
 		renderBullets(map,AMMO,&coo);
+		updateBullets(map,AMMO,&coo);
+		
+		renderEnemies(Enemies,&coo,level);				
+		updateEnemies(&enemiesAlive,map,Enemies,&level,&player, AMMO);
 		refresh();
 		running = movePlayer(&player, map,AMMO);
 		napms(40);

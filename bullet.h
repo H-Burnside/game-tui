@@ -20,4 +20,5 @@ typedef struct {
 void loadAMMO(Bullet*);
 
 void renderBullets(char [][SQ_SIZE*2], Bullet*,Corner* );
+void updateBullets(char [][SQ_SIZE*2],Bullet*, Corner*);
 #endif 

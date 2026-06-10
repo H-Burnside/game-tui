@@ -7,5 +7,5 @@
 #define ACTIVE 		(1 << 2)
 #define YAXIS 		(1 << 1) 	
 #define INCREMENT 	(1 << 0)
-
+#define MAX_ENEMIES	100
 #endif
