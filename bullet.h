@@ -4,21 +4,13 @@
 #include "constants.h"
 #include "window.h"
 
-typedef enum {
-	TO_LEFT,
-	TO_RIGHT,
-	TO_UP,
-	TO_DOWN
-} Direction;
 
-typedef struct {
-	int row;
-	int col;
-	unsigned int direction: 3; // MSB: active, i<<1: y-axis, LSB: increment;
-} Bullet ;
 
 void loadAMMO(Bullet*);
 
 void renderBullets(char [][SQ_SIZE*2], Bullet*,Corner* );
-void updateBullets(char [][SQ_SIZE*2],Bullet*, Corner*);
+void updateBullets(char [][SQ_SIZE*2],Bullet*, Corner*, Enemy* enemies,Player*,int level, int* kills, GameState* state);
+int searchEnemies(Enemy* enemies, int* bulletRow, int* BulletCol, int level, int* kills);
+int foundPlayer(Player*,int* bulletRow, int* bulletCol,int level, int* kills, GameState* state);
+
 #endif 

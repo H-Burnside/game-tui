@@ -2,9 +2,8 @@
 #include "bullet.h"
 
 /**
- * Creates the linked list for the bullets
+ * Create a pool of bullets with no direction
  * args: Bullet AMMO[MAX_AMMO]
- * return: HEAD
  */
 void loadAMMO(Bullet* ammo){
 	for (int i = 0 ; i < MAX_AMMO ; i++ ){
@@ -35,11 +34,15 @@ void renderBullets(char map[][SQ_SIZE*2], Bullet* ammo, Corner* coo){
 	}
 }
 
-void updateBullets(char map[][SQ_SIZE * 2],Bullet* ammo, Corner* coo){
+/**
+ * Logic behind the movement of the bullets
+ */
+void updateBullets(char map[][SQ_SIZE * 2],Bullet* ammo, Corner* coo, Enemy* enemies,Player* player, int level, int* kills, GameState* state){
 	for (int i = 0 ; i < MAX_AMMO ; i ++){
 		// Active bullets ammo[i]: Bullet
 		if (ammo[i].direction >> 2 ){
-			if(map[ammo[i].row][ammo[i].col]==' '){
+
+			if(map[ammo[i].row][ammo[i].col]==' ' && searchEnemies(enemies,&ammo[i].row, &ammo[i].col, level, kills)==0 && !foundPlayer(player, &ammo[i].row, &ammo[i].col,level, kills,state)){
 				// moving the bullet
 				Direction direction = (ammo[i].direction & (YAXIS | INCREMENT));
 				switch(direction){
@@ -55,5 +58,31 @@ void updateBullets(char map[][SQ_SIZE * 2],Bullet* ammo, Corner* coo){
 		}
 
 	}
+}
+
+/**
+ * It finds enemies in the travel of the bullet
+ * return 1 in the positive case
+ */
+int searchEnemies(Enemy* enemies, int* bulletRow, int* bulletCol, int level, int* kills){
+	for(int i = 0; i < level ; i++){
+		if(enemies[i].alive && enemies[i].row == *bulletRow &&
+		   enemies[i].col == *bulletCol){
+			enemies[i].alive = 0;
+			(*kills)+=1;
+			return 1;
+		}
+	}	
+	return 0;
+}
+
+int foundPlayer(Player* player, int* bulletRow, int* bulletCol, int level, int* kills, GameState* state){
+	if (player->row == *bulletRow && player->col == *bulletCol){
+		gameover(level, *kills);
+		(*state)= GAME_OVER;
+		return 1;
+	}
+	return 0;
+
 }
 
